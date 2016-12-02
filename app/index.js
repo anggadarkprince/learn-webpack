@@ -11,3 +11,7 @@ function component () {
 
 document.body.appendChild(component());
 document.write(require("./content.js"));
+
+var inc = require('./increment').increment;
+var a = 1;
+console.log(inc(a)); // 2
