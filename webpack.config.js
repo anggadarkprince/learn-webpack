@@ -17,10 +17,17 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, 'dist/js'),
-        filename: 'app.bundle.js'
+        filename: 'app.bundle.js',
+        publicPath: '/'
     },
     watch: isDevelopment,
-    devtool: "source-map",
+    devtool: 'inline-source-map',
+    devServer: {
+        contentBase: path.join(__dirname, "dist"),
+        compress: true,
+        port: 9000,
+        hot: true
+    },
     module: {
         rules: [{
             test: /\.(woff|woff2|eot|ttf)$/,
@@ -130,6 +137,7 @@ module.exports = {
             // minChunks: 3, // (Modules must be shared between 3 entries)
             // chunks: ["pageA", "pageB"], // (Only use these entries)
         }),
+        new webpack.HotModuleReplacementPlugin(),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',

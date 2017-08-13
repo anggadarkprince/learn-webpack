@@ -4,6 +4,7 @@
   "description": "Learning Webpack 3",
   "main": "src/app.js",
   "scripts": {
+    "start": "webpack-dev-server --open",
     "build:development": "cross-env NODE_ENV=development webpack -d",
     "build:production": "cross-env NODE_ENV=production webpack -p --progress --profile --colors",
     "build:dev": "cross-env NODE_ENV=development webpack --config webpack.dev.js",
@@ -30,7 +31,8 @@
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "url-loader": "^0.5.9",
-    "webpack": "^3.5.4"
+    "webpack": "^3.5.4",
+    "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
