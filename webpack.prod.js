@@ -1,6 +1,10 @@
 const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
+const imageminMozjpeg = require('imagemin-mozjpeg');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 var environment = process.env.NODE_ENV || 'development';
 console.log('Build in : ' + environment);
@@ -33,6 +37,23 @@ module.exports = {
                     name: "[name].[ext]",
                     outputPath: '../images/'
                 }
+            }, {
+                loader: 'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false',
+                options: {
+                    mozjpeg: {
+                        progressive: true,
+                    },
+                    gifsicle: {
+                        interlaced: false,
+                    },
+                    optipng: {
+                        optimizationLevel: 4,
+                    },
+                    pngquant: {
+                        quality: '75-90',
+                        speed: 3,
+                    },
+                }
             }]
         }, {
             test: /(\.scss|\.css)$/,
@@ -60,6 +81,39 @@ module.exports = {
         }]
     },
     plugins: [
+        new CleanWebpackPlugin(['dist']),
+        new CopyWebpackPlugin([
+            {from: 'src/json/', to: '../json/'},
+            {from: 'src/images/', to: '../images/'},
+        ]),
+        new ImageminPlugin({
+            test: /\.(jpe?g|png|gif|svg)$/i,
+            optipng: {
+                optimizationLevel: 7,
+            },
+            pngquant: {
+                quality: '65-90',
+                speed: 4,
+            },
+            gifsicle: {
+                optimizationLevel: 3,
+            },
+            svgo: {
+                plugins: [{
+                    removeViewBox: false,
+                    removeEmptyAttrs: true,
+                }],
+            },
+            jpegtran: {
+                progressive: true,
+            },
+            plugins: [
+                imageminMozjpeg({
+                    quality: 65,
+                    progressive: true,
+                }),
+            ],
+        }),
         new ExtractTextPlugin({
             filename: "../css/app.css"
         }),
