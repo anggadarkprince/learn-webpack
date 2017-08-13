@@ -1,11 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var ImageminPlugin = require('imagemin-webpack-plugin').default;
 
 var environment = process.env.NODE_ENV || 'development';
-const isDevelopment = (environment === "development");
 console.log('Build in : ' + environment);
 
 module.exports = {
@@ -17,15 +14,13 @@ module.exports = {
         path: path.resolve(__dirname, 'dist/js'),
         filename: 'app.bundle.js'
     },
-    watch: isDevelopment,
-    devtool: "source-map",
     module: {
         rules: [{
             test: /\.(woff|woff2|eot|ttf)$/,
             use: [{
                 loader: 'url-loader',
                 options: {
-                    limit: 30000,
+                    limit: 100000,
                     name: "[name].[ext]",
                     outputPath: '../fonts/'
                 }
@@ -45,11 +40,11 @@ module.exports = {
                 fallback: 'style-loader', // inject CSS to page, creates style nodes from JS strings
                 use: [{
                     loader: 'css-loader', options: { // translates CSS into CommonJS modules
-                        sourceMap: isDevelopment
+                        sourceMap: false
                     }
                 }, {
                     loader: 'postcss-loader', options: { // Run post css actions
-                        sourceMap: isDevelopment, // 'inline'
+                        sourceMap: false, // 'inline'
                         plugins: [ // post css plugins, can be exported to postcss.config.js
                             require('precss')(),
                             require('autoprefixer')(),
@@ -57,30 +52,24 @@ module.exports = {
                     }
                 }, {
                     loader: 'sass-loader', options: { // compiles SASS to CSS
-                        outputStyle: isDevelopment ? 'expanded' : 'compressed', // nested, expanded, compact, compressed
-                        sourceMap: isDevelopment
+                        outputStyle: 'compressed', // nested, expanded, compact, compressed
+                        sourceMap: false
                     }
                 }]
             })
         }]
     },
     plugins: [
-        new CopyWebpackPlugin([
-            {from: 'src/json/', to: '../json/'},
-            {from: 'src/images/', to: '../images/'},
-        ]),
-        new ImageminPlugin({
-            test: /\.(jpe?g|png|gif|svg)$/i,
-            disable: isDevelopment, // Disable during development
-            pngquant: {
-                quality: '75-100'
-            },
-            jpegtran: {
-                progressive: true
-            }
-        }),
         new ExtractTextPlugin({
             filename: "../css/app.css"
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: true,
+            sourceMap: false,
+            parallel: {
+                cache: true,
+                workers: 2
+            }
         }),
         new webpack.optimize.LimitChunkCountPlugin({
             maxChunks: 15
@@ -96,6 +85,10 @@ module.exports = {
             $: 'jquery',
             jQuery: 'jquery',
             _: 'lodash'
-        })
+        }),
+        new webpack.LoaderOptionsPlugin({
+            minimize: true,
+            debug: false
+        }),
     ]
 };

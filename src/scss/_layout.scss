@@ -1,0 +1,23 @@
+@import "variables";
+
+body {
+  background: $bg-color;
+  font-family: $base-font;
+}
+
+.login-wrapper {
+  max-width: 300px;
+  margin: 50px auto 20px;
+
+  .login-logo {
+    margin-bottom: 20px;
+
+    a {
+      font-size: 18px;
+    }
+
+    .subtitle {
+      opacity: 0.8;
+    }
+  }
+}

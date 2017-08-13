@@ -1,11 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var ImageminPlugin = require('imagemin-webpack-plugin').default;
 
 var environment = process.env.NODE_ENV || 'development';
-const isDevelopment = (environment === "development");
 console.log('Build in : ' + environment);
 
 module.exports = {
@@ -15,9 +12,8 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, 'dist/js'),
-        filename: 'app.bundle.js'
+        filename: 'app.bundle.js',
     },
-    watch: isDevelopment,
     devtool: "source-map",
     module: {
         rules: [{
@@ -45,11 +41,11 @@ module.exports = {
                 fallback: 'style-loader', // inject CSS to page, creates style nodes from JS strings
                 use: [{
                     loader: 'css-loader', options: { // translates CSS into CommonJS modules
-                        sourceMap: isDevelopment
+                        sourceMap: true
                     }
                 }, {
                     loader: 'postcss-loader', options: { // Run post css actions
-                        sourceMap: isDevelopment, // 'inline'
+                        sourceMap: true, // 'inline'
                         plugins: [ // post css plugins, can be exported to postcss.config.js
                             require('precss')(),
                             require('autoprefixer')(),
@@ -57,28 +53,14 @@ module.exports = {
                     }
                 }, {
                     loader: 'sass-loader', options: { // compiles SASS to CSS
-                        outputStyle: isDevelopment ? 'expanded' : 'compressed', // nested, expanded, compact, compressed
-                        sourceMap: isDevelopment
+                        outputStyle: 'expanded', // nested, expanded, compact, compressed
+                        sourceMap: true
                     }
                 }]
             })
         }]
     },
     plugins: [
-        new CopyWebpackPlugin([
-            {from: 'src/json/', to: '../json/'},
-            {from: 'src/images/', to: '../images/'},
-        ]),
-        new ImageminPlugin({
-            test: /\.(jpe?g|png|gif|svg)$/i,
-            disable: isDevelopment, // Disable during development
-            pngquant: {
-                quality: '75-100'
-            },
-            jpegtran: {
-                progressive: true
-            }
-        }),
         new ExtractTextPlugin({
             filename: "../css/app.css"
         }),

@@ -1,24 +1,40 @@
 {
-  "name": "js-webpack",
+  "name": "js-webpack3",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Learning Webpack 3",
+  "main": "src/app.js",
   "scripts": {
+    "build:development": "cross-env NODE_ENV=development webpack -d",
+    "build:production": "webpack -p",
+    "build:dev": "cross-env NODE_ENV=development webpack --config webpack.dev.js",
+    "build:prod": "cross-env NODE_ENV=production webpack --config webpack.prod.js --progress --profile --colors",
+    "build:multiple": "webpack --config webpack.multiple.js",
+    "build": "rm -f -r dist && webpack -p",
+    "clean": "rm -f -r dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Angga Ari Wijaya",
   "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-core": "^6.18.2",
-    "babel-loader": "^6.2.8",
-    "babel-preset-es2015": "^6.18.0",
-    "css-loader": "^0.26.1",
-    "style-loader": "^0.13.1",
-    "webpack": "^1.13.3"
+    "autoprefixer": "^7.1.2",
+    "copy-webpack-plugin": "^4.0.1",
+    "cross-env": "^5.0.5",
+    "css-loader": "^0.28.4",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^0.11.2",
+    "imagemin-webpack-plugin": "^1.5.0-beta.0",
+    "node-sass": "^4.5.3",
+    "postcss-loader": "^2.0.6",
+    "precss": "^2.0.0",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "url-loader": "^0.5.9",
+    "webpack": "^3.5.4"
   },
   "dependencies": {
-    "lodash": "^4.17.2"
+    "bootstrap": "^3.3.7",
+    "bootstrap-sass": "^3.3.7",
+    "jquery": "^3.2.1",
+    "lodash": "^4.17.4"
   }
 }
